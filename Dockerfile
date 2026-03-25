@@ -1,13 +1,13 @@
-FROM node:22-alpine AS builder
+FROM node:24-slim AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY index.js ./
 COPY src/ ./src/
 
-FROM node:22-alpine
+FROM gcr.io/distroless/nodejs24-debian12:nonroot
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -15,7 +15,4 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/index.js ./index.js
 COPY --from=builder /app/src/ ./src/
 
-RUN addgroup -S mcpuser && adduser -S mcpuser -G mcpuser
-USER mcpuser
-
-ENTRYPOINT ["node", "index.js"]
+ENTRYPOINT ["/nodejs/bin/node", "index.js"]

@@ -40,15 +40,15 @@
     "url": "https://github.com/rflpazini/mcp-api-gateway/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.5.0",
-    "@apidevtools/swagger-parser": "^10.1.0",
-    "axios": "^1.6.7",
-    "js-yaml": "^4.1.0"
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@apidevtools/swagger-parser": "^12.1.0",
+    "axios": "^1.13.6",
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.14"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.0.0"
   }
 }

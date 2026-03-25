@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getMaxResponseSize } from './config.js';
+import { CookieJar } from './cookie-jar.js';
 
 const RETRYABLE_STATUS_CODES = [429, 500, 502, 503, 504];
 const BASE_RETRY_DELAY_MS = 1000;
@@ -9,6 +10,7 @@ export class ApiClient {
   constructor(registry) {
     this.registry = registry;
     this.maxResponseSize = getMaxResponseSize();
+    this.cookieJar = new CookieJar();
   }
 
   async executeAPI(args) {
@@ -19,11 +21,18 @@ export class ApiClient {
       throw new Error(`API '${api_name}' not found`);
     }
 
+    const mergedHeaders = { ...api.headers, ...headers };
+
+    const cookieHeader = this.cookieJar.mergeWithExisting(api_name, mergedHeaders['cookie'] || mergedHeaders['Cookie']);
+    if (cookieHeader) {
+      mergedHeaders['Cookie'] = cookieHeader;
+    }
+
     const url = `${api.baseUrl}${path}`;
     const config = {
       method: method.toLowerCase(),
       url,
-      headers: { ...api.headers, ...headers },
+      headers: mergedHeaders,
       params,
       data,
       timeout: api.timeout || 30000,
@@ -36,6 +45,11 @@ export class ApiClient {
       () => axios(config),
       maxRetries
     );
+
+    const setCookies = response.headers?.['set-cookie'];
+    if (setCookies) {
+      this.cookieJar.setCookiesFromHeaders(api_name, Array.isArray(setCookies) ? setCookies : [setCookies]);
+    }
 
     const text = JSON.stringify(response.data, null, 2);
 
