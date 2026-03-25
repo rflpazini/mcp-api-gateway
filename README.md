@@ -79,6 +79,9 @@ docker run --rm -it \
 ```
 
 #### Multiple APIs
+
+Configure multiple APIs by incrementing the index (`API_1_*`, `API_2_*`, `API_3_*`):
+
 ```json
 {
   "mcpServers": {
@@ -86,21 +89,15 @@ docker run --rm -it \
       "command": "docker",
       "args": [
         "run", "--rm", "-i",
-        // Users API
         "-e", "API_1_NAME=users",
         "-e", "API_1_SWAGGER_URL=https://api.company.com/users/swagger.json",
         "-e", "API_1_HEADER_X_API_KEY=users_key_123",
-        
-        // Products API  
         "-e", "API_2_NAME=products",
         "-e", "API_2_SWAGGER_URL=https://api.company.com/products/openapi.yaml",
         "-e", "API_2_HEADER_AUTHORIZATION=Bearer products_token",
-        
-        // Orders API (with multiple headers)
         "-e", "API_3_NAME=orders",
         "-e", "API_3_SWAGGER_URL=https://api.company.com/orders/spec.json",
         "-e", "API_3_HEADERS={\"Authorization\":\"Bearer token\",\"X-Tenant\":\"company123\"}",
-        
         "mcp-api-gateway:latest"
       ]
     }
@@ -162,8 +159,10 @@ docker buildx build --platform linux/amd64,linux/arm64 \
 ```
 
 ### 2. API with Local Swagger
+
+Mount a local Swagger file into the container:
+
 ```json
-// Mount local Swagger file
 "-v", "/path/to/swagger.yaml:/swagger.yaml",
 "-e", "API_1_NAME=local-api",
 "-e", "API_1_SWAGGER_URL=file:///swagger.yaml",
