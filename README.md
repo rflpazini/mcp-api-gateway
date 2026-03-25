@@ -1,4 +1,4 @@
-# mcp/api-gateway
+# api-gateway
 
 [![Build](https://github.com/rflpazini/mcp-api-gateway/actions/workflows/build.yml/badge.svg)](https://github.com/rflpazini/mcp-api-gateway/actions/workflows/build.yml)
 [![Docker MCP Toolkit](https://img.shields.io/badge/Docker%20MCP-Toolkit-blue?logo=docker)](https://hub.docker.com/mcp/server/mcp-api-gateway/overview)
