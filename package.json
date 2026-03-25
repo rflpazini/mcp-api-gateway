@@ -3,11 +3,21 @@
   "version": "1.0.0",
   "description": "Universal MCP server for API integration with Claude Desktop",
   "main": "index.js",
+  "bin": {
+    "mcp-api-gateway": "./index.js"
+  },
   "type": "module",
+  "files": [
+    "index.js",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
     "docker:build": "docker build -t mcp-api-gateway .",
     "docker:run": "docker run --rm -it mcp-api-gateway"
   },
@@ -19,22 +29,26 @@
     "openapi",
     "model-context-protocol"
   ],
-  "author": "Your Name",
+  "author": "rflpazini",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/mcp-api-gateway.git"
+    "url": "https://github.com/rflpazini/mcp-api-gateway.git"
+  },
+  "homepage": "https://github.com/rflpazini/mcp-api-gateway",
+  "bugs": {
+    "url": "https://github.com/rflpazini/mcp-api-gateway/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.5.0",
-    "@apidevtools/swagger-parser": "^10.1.0",
-    "axios": "^1.6.7",
-    "js-yaml": "^4.1.0"
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@apidevtools/swagger-parser": "^12.1.0",
+    "axios": "^1.13.6",
+    "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.14"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=24.0.0"
   }
 }

@@ -12,56 +12,50 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
+
       - name: Generate changelog
         id: changelog
         run: |
-          # Get the previous tag
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
-          
-          # Generate changelog
+
           if [ -z "$PREV_TAG" ]; then
             CHANGELOG=$(git log --pretty=format:"- %s" --reverse)
           else
             CHANGELOG=$(git log --pretty=format:"- %s" --reverse ${PREV_TAG}..HEAD)
           fi
-          
-          # Save to file for the release
+
           echo "## What's Changed" > CHANGELOG.md
           echo "" >> CHANGELOG.md
           echo "$CHANGELOG" >> CHANGELOG.md
           echo "" >> CHANGELOG.md
           echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ github.ref_name }}" >> CHANGELOG.md
-          
-          # Set output
+
           echo "changelog<<EOF" >> $GITHUB_OUTPUT
           cat CHANGELOG.md >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-      
+
       - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: |
             ## Docker Image
-            
+
             ```bash
             docker pull ${{ secrets.DOCKER_USERNAME }}/mcp-api-gateway:${{ github.ref_name }}
             ```
-            
+
             ## Quick Start
-            
+
             Add to your `claude_desktop_config.json`:
-            
+
             ```json
             {
               "mcpServers": {
@@ -72,14 +66,14 @@ jobs:
                     "-e", "API_1_NAME=my-api",
                     "-e", "API_1_SWAGGER_URL=https://api.example.com/swagger.json",
                     "-e", "API_1_BASE_URL=https://api.example.com/v1",
+                    "-e", "API_1_TOOL_MODE=grouped",
                     "${{ secrets.DOCKER_USERNAME }}/mcp-api-gateway:${{ github.ref_name }}"
                   ]
                 }
               }
             }
             ```
-            
+
             ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
-          
