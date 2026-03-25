@@ -1,12 +1,19 @@
 # mcp/api-gateway
 
 [![Build](https://github.com/rflpazini/mcp-api-gateway/actions/workflows/build.yml/badge.svg)](https://github.com/rflpazini/mcp-api-gateway/actions/workflows/build.yml)
+[![Docker MCP Toolkit](https://img.shields.io/badge/Docker%20MCP-Toolkit-blue?logo=docker)](https://hub.docker.com/mcp/server/mcp-api-gateway/overview)
 
 A universal MCP (Model Context Protocol) server to integrate any API with Claude Desktop using only Docker configurations. Point it at any Swagger/OpenAPI spec and it automatically generates tools that Claude can use.
 
+Available on the [Docker MCP Toolkit](https://hub.docker.com/mcp/server/mcp-api-gateway/overview).
+
 ## Quick Installation
 
-### Using Docker Hub (Recommended)
+### Using Docker MCP Toolkit (Recommended)
+
+The easiest way to get started is through the [Docker MCP Toolkit](https://hub.docker.com/mcp/server/mcp-api-gateway/overview), which provides one-click setup with Docker Desktop.
+
+### Using Docker Hub
 
 Add to your `claude_desktop_config.json`:
 
